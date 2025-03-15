@@ -4,7 +4,6 @@ import game.Cell;
 import game.GameResult;
 import game.Move;
 import game.Player;
-import boards.TicTacToeBoard;
 import java.util.Scanner;
 
 public class Main {
