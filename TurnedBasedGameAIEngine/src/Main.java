@@ -1,119 +1,75 @@
+import api.GameEngine;
+import game.Board;
+import game.Cell;
+import game.GameResult;
+import game.Move;
+import game.Player;
+import boards.TicTacToeBoard;
+import java.util.Scanner;
+
 public class Main {
-    public void move(Board board, Player player, Move move) {
-    }
+    public static void main(String[] args) {
+        GameEngine gameEngine = new GameEngine();
+        Board board = gameEngine.start("TicTacToe");
 
-    public GameResult isComplete(Board board) {
-        if (board instanceof TicTacToeBoard) {
-            TicTacToeBoard board1 = (TicTacToeBoard) board;
-            boolean rowComplete, columnComplete, diagonalComplete, revdiagonalComplete;
-            String firstCharacter;
+        Player computer = new Player("Computer", "O");
+        Player opponent = new Player("Opponent", "X");
+        Scanner scanner = new Scanner(System.in);
 
-            // Row checking
-            for (int i = 0; i < 3; i++) {
-                rowComplete = true;
-                firstCharacter = board1.cells[i][0];
-                if (firstCharacter == null) continue; // Skip empty row
+        // Print initial empty board
+        printBoard(board);
 
-                for (int j = 1; j < 3; j++) {
-                    if (board1.cells[i][j] == null || !board1.cells[i][j].equals(firstCharacter)) {
-                        rowComplete = false;
-                        break;
-                    }
-                }
-                if (rowComplete) {
-                    return new GameResult(true, firstCharacter);
-                }
+        while (!gameEngine.isGameComplete(board).isOver()) {
+            System.out.println("Make your move! Enter row and column (0-2):");
+            int row = scanner.nextInt();
+            int col = scanner.nextInt();
+            Move opponentMove = new Move(new Cell(row, col));
+            gameEngine.move(board, opponent, opponentMove);
+            printBoard(board);
+
+            if (gameEngine.isGameComplete(board).isOver()) {
+                break; // Stop if the game is over
             }
 
-            // Column checking
-            for (int i = 0; i < 3; i++) {
-                columnComplete = true;
-                firstCharacter = board1.cells[0][i];
-                if (firstCharacter == null) continue; // Skip empty column
-
-                for (int j = 1; j < 3; j++) {
-                    if (board1.cells[j][i] == null || !board1.cells[j][i].equals(firstCharacter)) {
-                        columnComplete = false;
-                        break;
-                    }
-                }
-                if (columnComplete) {
-                    return new GameResult(true, firstCharacter);
-                }
-            }
-
-            // Checking diagonals
-            diagonalComplete = true;
-            firstCharacter = board1.cells[0][0];
-            if (firstCharacter != null) {
-                for (int i = 1; i < 3; i++) {
-                    if (board1.cells[i][i] == null || !board1.cells[i][i].equals(firstCharacter)) {
-                        diagonalComplete = false;
-                        break;
-                    }
-                }
-                if (diagonalComplete) {
-                    return new GameResult(true, firstCharacter);
-                }
-            }
-
-            // Checking reverse diagonals
-            revdiagonalComplete = true;
-            firstCharacter = board1.cells[0][2];
-            if (firstCharacter != null) {
-                for (int i = 1; i < 3; i++) {
-                    if (board1.cells[i][2 - i] == null || !board1.cells[i][2 - i].equals(firstCharacter)) {
-                        revdiagonalComplete = false;
-                        break;
-                    }
-                }
-                if (revdiagonalComplete) {
-                    return new GameResult(true, firstCharacter);
-                }
-            }
-
-            // Checking if board is full (draw condition)
-            int countOfFilledCells = 0;
-            for (int i = 0; i < 3; i++) {
-                for (int j = 0; j < 3; j++) { // Fix j starting from 0
-                    if (board1.cells[i][j] != null) {
-                        countOfFilledCells++;
-                    }
-                }
-            }
-            if (countOfFilledCells == 9) {
-                return new GameResult(true, "-"); // Draw
-            }
-
-            return new GameResult(false, "-"); // Game is still ongoing
+            System.out.println("Computer's turn...");
+            Move computerMove = gameEngine.suggestMove(board);
+            gameEngine.move(board, computer, computerMove);
+            
+            printBoard(board);
         }
 
-        return new GameResult(false, "-"); // Default return if board is not TicTacToeBoard
+        GameResult result = gameEngine.getGameResult(board);
+        if (result.getWinner().equals("-")) {
+            System.out.println("Game Over! It's a draw!");
+        } else {
+            System.out.println("Game Over! Winner: " + result.getWinner());
+        }
+        
+        scanner.close();
     }
 
-    public static void main(String[] args) {
+    /**
+     * Prints the current state of the board in a formatted manner
+     * @param board The game board to print
+     */
+    public static void printBoard(Board board) {
+        if (!(board instanceof TicTacToeBoard)) {
+            System.out.println("Unsupported board type");
+            return;
+        }
+        
+        TicTacToeBoard ticTacToeBoard = (TicTacToeBoard) board;
+        System.out.println("Current Board:");
+        System.out.println("-------------");
+        
+        for (int i = 0; i < 3; i++) {
+            System.out.print("| ");
+            for (int j = 0; j < 3; j++) {
+                String cell = ticTacToeBoard.getCell(i, j);
+                System.out.print((cell == null ? " " : cell) + " | ");
+            }
+            System.out.println("\n-------------");
+        }
+        System.out.println();
     }
-}
-
-class Board {
-}
-
-class Player {
-}
-
-class Move {
-}
-
-class GameResult {
-    boolean isOver;
-    String winner;
-
-    public GameResult(boolean isOver, String winner) {
-        this.winner = winner;
-        this.isOver = isOver;
-    }
-}
-
-class TicTacToeBoard extends Board {
-    String[][] cells = new String[3][3];
 }
