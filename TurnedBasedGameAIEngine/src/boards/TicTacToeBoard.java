@@ -25,4 +25,23 @@ public class TicTacToeBoard extends Board {
         }
         return result;
     }
+    
+    /**
+     * Prints the current state of the board in a formatted manner
+     */
+    @Override
+    public void printBoard() {
+        System.out.println("Current Board:");
+        System.out.println("-------------");
+        
+        for (int i = 0; i < 3; i++) {
+            System.out.print("| ");
+            for (int j = 0; j < 3; j++) {
+                String cell = getCell(i, j);
+                System.out.print((cell == null ? " " : cell) + " | ");
+            }
+            System.out.println("\n-------------");
+        }
+        System.out.println();
+    }
 }

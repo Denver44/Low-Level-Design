@@ -17,7 +17,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
 
         // Print initial empty board
-        printBoard(board);
+        board.printBoard();
 
         while (!gameEngine.isGameComplete(board).isOver()) {
             System.out.println("Make your move! Enter row and column (0-2):");
@@ -25,7 +25,7 @@ public class Main {
             int col = scanner.nextInt();
             Move opponentMove = new Move(new Cell(row, col));
             gameEngine.move(board, opponent, opponentMove);
-            printBoard(board);
+            board.printBoard();
 
             if (gameEngine.isGameComplete(board).isOver()) {
                 break; // Stop if the game is over
@@ -35,7 +35,7 @@ public class Main {
             Move computerMove = gameEngine.suggestMove(board);
             gameEngine.move(board, computer, computerMove);
             
-            printBoard(board);
+            board.printBoard();
         }
 
         GameResult result = gameEngine.getGameResult(board);
@@ -46,30 +46,5 @@ public class Main {
         }
         
         scanner.close();
-    }
-
-    /**
-     * Prints the current state of the board in a formatted manner
-     * @param board The game board to print
-     */
-    public static void printBoard(Board board) {
-        if (!(board instanceof TicTacToeBoard)) {
-            System.out.println("Unsupported board type");
-            return;
-        }
-        
-        TicTacToeBoard ticTacToeBoard = (TicTacToeBoard) board;
-        System.out.println("Current Board:");
-        System.out.println("-------------");
-        
-        for (int i = 0; i < 3; i++) {
-            System.out.print("| ");
-            for (int j = 0; j < 3; j++) {
-                String cell = ticTacToeBoard.getCell(i, j);
-                System.out.print((cell == null ? " " : cell) + " | ");
-            }
-            System.out.println("\n-------------");
-        }
-        System.out.println();
     }
 }
