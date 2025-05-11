@@ -6,9 +6,9 @@ import {
   CreateDateColumn,
 } from 'typeorm';
 import { Ticket } from './ticket';
-import { PaymentType } from './paymentType';
-import { PaymentProvider } from './paymentProvider';
-import { PaymentStatus } from './paymentStatus';
+import { PaymentType } from './PaymentType';
+import { PaymentProvider } from './PaymentProvider';
+import { PaymentStatus } from './PaymentStatus';
 
 @Entity('payments')
 export class Payment {
