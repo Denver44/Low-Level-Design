@@ -10,9 +10,9 @@ interface Ticket {
   user: User;
   seats: Seat[];
   amount: number;
-  payment: Payment;
-  bookingTime: Date; // Added booking time
-  status: TicketStatus; // Added ticket status
+  payments: Payment[]; // Changed from single payment to list
+  bookingTime: Date;
+  status: TicketStatus;
 }
 
 class TicketModel implements Ticket {
@@ -21,7 +21,7 @@ class TicketModel implements Ticket {
   user: User;
   seats: Seat[];
   amount: number;
-  payment: Payment;
+  payments: Payment[];
   bookingTime: Date;
   status: TicketStatus;
 
@@ -30,17 +30,21 @@ class TicketModel implements Ticket {
     show: Show,
     user: User,
     seats: Seat[],
-    amount: number,
-    payment: Payment
+    amount: number
   ) {
     this.ticketId = ticketId;
     this.show = show;
     this.user = user;
     this.seats = seats;
     this.amount = amount;
-    this.payment = payment;
-    this.bookingTime = new Date(); // Set to current time
-    this.status = TicketStatus.BOOKED; // Default status
+    this.payments = []; // Initialize empty payments list
+    this.bookingTime = new Date();
+    this.status = TicketStatus.BOOKED;
+  }
+
+  // Method to add a payment
+  addPayment(payment: Payment): void {
+    this.payments.push(payment);
   }
 }
 

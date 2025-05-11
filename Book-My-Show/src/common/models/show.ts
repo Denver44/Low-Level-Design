@@ -1,8 +1,8 @@
 import { Auditorium } from './auditorium';
 import { Movie } from './movie';
-import { ShowSeatMapping } from './showSeatMapping';
+import { ShowSeat } from './showSeat';
+import { ShowSeatType } from './showSeatType';
 
-// Feature enum
 export enum Feature {
   IMAX = 'IMAX',
   THREE_D = 'THREE_D',
@@ -12,13 +12,14 @@ export enum Feature {
 
 interface Show {
   showId: string;
-  movie: Movie; // Changed from movieName to Movie object
+  movie: Movie;
   startTime: Date;
   endTime: Date;
   language: string;
-  features: Feature[]; // Added features list
+  features: Feature[];
   auditorium: Auditorium;
-  showSeatMappings?: ShowSeatMapping[];
+  showSeatTypes?: ShowSeatType[]; // Updated to use ShowSeatType
+  showSeats?: ShowSeat[]; // Updated to use ShowSeat
 }
 
 class ShowModel implements Show {
@@ -29,7 +30,8 @@ class ShowModel implements Show {
   language: string;
   features: Feature[];
   auditorium: Auditorium;
-  showSeatMappings?: ShowSeatMapping[];
+  showSeatTypes?: ShowSeatType[];
+  showSeats?: ShowSeat[];
 
   constructor(
     showId: string,
@@ -47,7 +49,8 @@ class ShowModel implements Show {
     this.language = language;
     this.features = features;
     this.auditorium = auditorium;
-    this.showSeatMappings = [];
+    this.showSeatTypes = [];
+    this.showSeats = [];
   }
 }
 
