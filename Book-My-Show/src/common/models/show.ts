@@ -1,7 +1,9 @@
 import { Auditorium } from './auditorium';
+import { Language } from './language';
 import { Movie } from './movie';
 import { ShowSeat } from './showSeat';
 import { ShowSeatType } from './showSeatType';
+import { BaseModel } from './baseModel';
 
 export enum Feature {
   IMAX = 'IMAX',
@@ -10,39 +12,38 @@ export enum Feature {
   DOLBY_VISION = 'DOLBY_VISION',
 }
 
-interface Show {
-  showId: string;
+interface Show extends BaseModel {
   movie: Movie;
   startTime: Date;
   endTime: Date;
-  language: string;
+  language: Language; // Now using Language enum
   features: Feature[];
   auditorium: Auditorium;
-  showSeatTypes?: ShowSeatType[]; // Updated to use ShowSeatType
-  showSeats?: ShowSeat[]; // Updated to use ShowSeat
+  showSeatTypes?: ShowSeatType[];
+  showSeats?: ShowSeat[];
 }
 
 class ShowModel implements Show {
-  showId: string;
+  id: string;
   movie: Movie;
   startTime: Date;
   endTime: Date;
-  language: string;
+  language: Language; // Now using Language enum
   features: Feature[];
   auditorium: Auditorium;
   showSeatTypes?: ShowSeatType[];
   showSeats?: ShowSeat[];
 
   constructor(
-    showId: string,
+    id: string,
     movie: Movie,
     startTime: Date,
     endTime: Date,
-    language: string,
+    language: Language,
     features: Feature[],
     auditorium: Auditorium
   ) {
-    this.showId = showId;
+    this.id = id;
     this.movie = movie;
     this.startTime = startTime;
     this.endTime = endTime;
