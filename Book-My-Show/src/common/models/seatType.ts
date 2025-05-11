@@ -1,21 +1,13 @@
-// From Note 4: SeatType class
-import { BaseModel } from './baseModel';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
-interface SeatType extends BaseModel {
-  name: string;
-  description?: string; // Optional field
-}
+@Entity('seat_types')
+export class SeatType {
+  @PrimaryGeneratedColumn('uuid')
+  id!: string;
 
-class SeatTypeModel implements SeatType {
-  id: string;
-  name: string;
+  @Column()
+  name!: string;
+
+  @Column({ nullable: true })
   description?: string;
-
-  constructor(id: string, name: string, description?: string) {
-    this.id = id;
-    this.name = name;
-    this.description = description;
-  }
 }
-
-export { SeatType, SeatTypeModel };

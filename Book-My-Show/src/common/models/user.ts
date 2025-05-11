@@ -1,40 +1,26 @@
-import { BaseModel } from './baseModel';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { Ticket } from './ticket';
 
-interface User extends BaseModel {
-  age: number; // Added age
-  name: string;
-  email: string;
-  password: string;
-  phoneNumber: string;
-  tickets: Ticket[];
+@Entity('users')
+export class User {
+  @PrimaryGeneratedColumn('uuid')
+  id!: string;
+
+  @Column()
+  name!: string;
+
+  @Column()
+  age!: number;
+
+  @Column({ unique: true })
+  email!: string;
+
+  @Column()
+  password!: string; // In production, this should be hashed
+
+  @Column()
+  phoneNumber!: string;
+
+  @OneToMany(() => Ticket, (ticket) => ticket.user)
+  tickets!: Ticket[];
 }
-
-class UserModel implements User {
-  id: string;
-  age: number;
-  name: string;
-  email: string;
-  password: string;
-  phoneNumber: string;
-  tickets: Ticket[];
-
-  constructor(
-    id: string,
-    name: string,
-    age: number,
-    email: string,
-    password: string,
-    phoneNumber: string
-  ) {
-    this.id = id;
-    this.age = age;
-    this.name = name;
-    this.email = email;
-    this.password = password; // In a real app, this should be hashed
-    this.phoneNumber = phoneNumber;
-    this.tickets = [];
-  }
-}
-
-export { User, UserModel };

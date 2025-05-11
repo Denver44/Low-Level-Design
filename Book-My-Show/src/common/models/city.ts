@@ -1,21 +1,14 @@
-import { BaseModel } from './baseModel';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { Theater } from './theater';
 
-interface City extends BaseModel {
-  name: string;
-  theaters: Theater[];
+@Entity('cities')
+export class City {
+  @PrimaryGeneratedColumn('uuid')
+  id!: string; // Note the '!' operator
+
+  @Column()
+  name!: string;
+
+  @OneToMany(() => Theater, (theater) => theater.city)
+  theaters!: Theater[];
 }
-
-class CityModel implements City {
-  id: string;
-  name: string;
-  theaters: Theater[];
-
-  constructor(id: string, name: string) {
-    this.id = id;
-    this.name = name;
-    this.theaters = [];
-  }
-}
-
-export { City, CityModel };

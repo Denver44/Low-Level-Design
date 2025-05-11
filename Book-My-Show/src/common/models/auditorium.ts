@@ -1,32 +1,35 @@
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  OneToMany,
+  ManyToMany,
+  JoinTable,
+} from 'typeorm';
 import { Feature } from './feature';
 import { Seat } from './seat';
 import { Show } from './show';
 import { Theater } from './theater';
-import { BaseModel } from './baseModel';
 
-interface Auditorium extends BaseModel {
-  name: string;
-  theater: Theater;
-  seats: Seat[];
-  shows: Show[];
-  features: Feature[]; // Added features list
+@Entity('auditoriums')
+export class Auditorium {
+  @PrimaryGeneratedColumn('uuid')
+  id!: string;
+
+  @Column()
+  name!: string;
+
+  @ManyToOne(() => Theater, (theater) => theater.auditoriums)
+  theater!: Theater;
+
+  @OneToMany(() => Seat, (seat) => seat.auditorium)
+  seats!: Seat[];
+
+  @OneToMany(() => Show, (show) => show.auditorium)
+  shows!: Show[];
+
+  @ManyToMany(() => Feature)
+  @JoinTable()
+  features!: Feature[];
 }
-
-class AuditoriumModel implements Auditorium {
-  id: string;
-  name: string;
-  theater: Theater;
-  seats: Seat[];
-  shows: Show[];
-  features: Feature[]; // Added features list
-  constructor(id: string, name: string, theater: Theater) {
-    this.id = id;
-    this.name = name;
-    this.theater = theater;
-    this.seats = [];
-    this.shows = [];
-    this.features = [];
-  }
-}
-
-export { Auditorium, AuditoriumModel };

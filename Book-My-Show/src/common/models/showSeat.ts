@@ -1,31 +1,23 @@
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { Seat } from './seat';
 import { Show } from './show';
+import { SeatStatus } from './SeatStatus';
 
-enum SeatStatus {
-  AVAILABLE = 'AVAILABLE',
-  BOOKED = 'BOOKED',
-  LOCKED = 'LOCKED',
+@Entity('show_seats')
+export class ShowSeat {
+  @PrimaryGeneratedColumn('uuid')
+  id!: string;
+
+  @ManyToOne(() => Show, (show) => show.showSeats)
+  show!: Show;
+
+  @ManyToOne(() => Seat)
+  seat!: Seat;
+
+  @Column({
+    type: 'enum',
+    enum: SeatStatus,
+    default: SeatStatus.AVAILABLE,
+  })
+  status!: SeatStatus;
 }
-
-interface ShowSeat {
-  id: string;
-  show: Show;
-  seat: Seat;
-  status: SeatStatus;
-}
-
-class ShowSeatModel implements ShowSeat {
-  id: string;
-  show: Show;
-  seat: Seat;
-  status: SeatStatus;
-
-  constructor(id: string, show: Show, seat: Seat) {
-    this.id = id;
-    this.show = show;
-    this.seat = seat;
-    this.status = SeatStatus.AVAILABLE; // Default status
-  }
-}
-
-export { SeatStatus, ShowSeat, ShowSeatModel };

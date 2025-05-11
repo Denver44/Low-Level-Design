@@ -1,38 +1,33 @@
-// From Note 5: Booking class
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  ManyToMany,
+  JoinTable,
+} from 'typeorm';
 import { Seat } from './seat';
 import { Show } from './show';
-import { BaseModel } from './baseModel';
+import { User } from './user';
 
-interface Booking extends BaseModel {
-  userId: string;
-  show: Show;
-  seats: Seat[];
-  totalAmount: number;
-  transactionId: string;
+@Entity('bookings')
+export class Booking {
+  @PrimaryGeneratedColumn('uuid')
+  id!: string;
+
+  @ManyToOne(() => User)
+  user!: User;
+
+  @ManyToOne(() => Show)
+  show!: Show;
+
+  @ManyToMany(() => Seat)
+  @JoinTable()
+  seats!: Seat[];
+
+  @Column('decimal', { precision: 10, scale: 2 })
+  totalAmount!: number;
+
+  @Column()
+  transactionId!: string;
 }
-
-class BookingModel implements Booking {
-  id: string;
-  userId: string;
-  show: Show;
-  seats: Seat[];
-  totalAmount: number;
-  transactionId: string;
-  constructor(
-    id: string,
-    userId: string,
-    show: Show,
-    seats: Seat[],
-    totalAmount: number,
-    transactionId: string
-  ) {
-    this.id = id;
-    this.userId = userId;
-    this.show = show;
-    this.seats = seats;
-    this.totalAmount = totalAmount;
-    this.transactionId = transactionId;
-  }
-}
-
-export { Booking, BookingModel };

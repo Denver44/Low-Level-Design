@@ -1,27 +1,27 @@
-import { Auditorium } from './auditorium';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm';
 import { City } from './city';
-import { BaseModel } from './baseModel';
+import { Auditorium } from './auditorium';
 
-interface Theater extends BaseModel {
-  theaterName: string;
-  address: string; // Added address
-  city: City;
-  auditoriums: Auditorium[];
+@Entity('theaters')
+export class Theater {
+  @PrimaryGeneratedColumn('uuid')
+  id!: string;
+
+  @Column()
+  name!: string;
+
+  @Column()
+  address!: string;
+
+  @ManyToOne(() => City, (city) => city.theaters)
+  city!: City;
+
+  @OneToMany(() => Auditorium, (auditorium) => auditorium.theater)
+  auditoriums!: Auditorium[];
 }
-
-class TheaterModel implements Theater {
-  id: string;
-  theaterName: string;
-  address: string;
-  city: City;
-  auditoriums: Auditorium[];
-  constructor(id: string, theaterName: string, address: string, city: City) {
-    this.id = id;
-    this.theaterName = theaterName;
-    this.address = address;
-    this.city = city;
-    this.auditoriums = [];
-  }
-}
-
-export { Theater, TheaterModel };

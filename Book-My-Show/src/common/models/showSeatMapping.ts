@@ -1,40 +1,26 @@
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { SeatType } from './seatType';
 import { Show } from './show';
+import { SeatStatus } from './SeatStatus';
 
-// Use the existing SeatStatus enum from seat.ts or create a new one
-enum SeatStatus {
-  AVAILABLE = 'AVAILABLE',
-  BOOKED = 'BOOKED',
-  LOCKED = 'LOCKED',
+@Entity('show_seat_mappings')
+export class ShowSeatMapping {
+  @PrimaryGeneratedColumn('uuid')
+  mappingId!: string;
+
+  @ManyToOne(() => Show)
+  show!: Show;
+
+  @ManyToOne(() => SeatType)
+  seatType!: SeatType;
+
+  @Column('decimal', { precision: 10, scale: 2 })
+  price!: number;
+
+  @Column({
+    type: 'enum',
+    enum: SeatStatus,
+    default: SeatStatus.AVAILABLE,
+  })
+  status!: SeatStatus;
 }
-
-interface ShowSeatMapping {
-  mappingId: string;
-  show: Show;
-  seatType: SeatType;
-  price: number;
-  status: SeatStatus;
-}
-
-class ShowSeatMappingModel implements ShowSeatMapping {
-  mappingId: string;
-  show: Show;
-  seatType: SeatType;
-  price: number;
-  status: SeatStatus;
-
-  constructor(
-    mappingId: string,
-    show: Show,
-    seatType: SeatType,
-    price: number
-  ) {
-    this.mappingId = mappingId;
-    this.show = show;
-    this.seatType = seatType;
-    this.price = price;
-    this.status = SeatStatus.AVAILABLE; // Default status
-  }
-}
-
-export { SeatStatus, ShowSeatMapping, ShowSeatMappingModel };

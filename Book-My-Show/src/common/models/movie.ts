@@ -1,45 +1,37 @@
-import { BaseModel } from './baseModel';
-import { Language } from './language';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
-interface Movie extends BaseModel {
-  title: string; // Changed from name to title
-  languages: Language[]; // Changed from string[] to Language[]
-  duration: number;
-  genre: string;
-  rating: string;
-  features: string[];
+@Entity('movies')
+export class Movie {
+  @PrimaryGeneratedColumn('uuid')
+  id!: string;
+
+  @Column()
+  title!: string;
+
+  @Column('simple-array')
+  languages!: string[];
+
+  @Column()
+  duration!: number;
+
+  @Column()
+  genre!: string;
+
+  @Column()
+  rating!: string;
+
+  @Column('simple-array')
+  features!: string[];
+
+  @Column('simple-array', { nullable: true })
   cast?: string[];
+
+  @Column()
+  releaseDate!: Date;
+
+  @Column()
+  endDate!: Date;
+
+  @Column()
+  language!: string; // Default language for backward compatibility
 }
-
-class MovieModel implements Movie {
-  id: string;
-  title: string;
-  languages: Language[];
-  duration: number;
-  genre: string;
-  rating: string;
-  features: string[];
-  cast?: string[];
-
-  constructor(
-    id: string,
-    title: string,
-    languages: Language[],
-    duration: number,
-    genre: string,
-    rating: string,
-    features: string[],
-    cast?: string[]
-  ) {
-    this.id = id;
-    this.title = title;
-    this.languages = languages;
-    this.duration = duration;
-    this.genre = genre;
-    this.rating = rating;
-    this.features = features;
-    this.cast = cast;
-  }
-}
-
-export { Movie, MovieModel };
