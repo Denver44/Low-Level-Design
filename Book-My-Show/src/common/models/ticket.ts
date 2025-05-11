@@ -1,49 +1,66 @@
+import { BaseModel } from './baseModel';
 import { Payment } from './payment';
+import { PaymentStatus } from './paymentStatus';
+import { PaymentType } from './paymentType';
 import { Seat } from './seat';
 import { Show } from './show';
 import { TicketStatus } from './ticketStatus';
 import { User } from './user';
-import { BaseModel } from './baseModel';
 
 interface Ticket extends BaseModel {
-  show: Show;
-  user: User;
-  seats: Seat[];
   amount: number;
-  payments: Payment[]; // Changed from single payment to list
   bookingTime: Date;
+  user: User;
+  show: Show;
+  seats: Seat[];
+  payments: Payment[];
   status: TicketStatus;
 }
 
 class TicketModel implements Ticket {
   id: string;
-  show: Show;
-  user: User;
-  seats: Seat[];
   amount: number;
-  payments: Payment[];
   bookingTime: Date;
+  user: User;
+  show: Show;
+  seats: Seat[];
+  payments: Payment[];
   status: TicketStatus;
+
   constructor(
     id: string,
-    show: Show,
+    amount: number,
     user: User,
-    seats: Seat[],
-    amount: number
+    show: Show,
+    seats: Seat[]
   ) {
     this.id = id;
-    this.show = show;
-    this.user = user;
-    this.seats = seats;
     this.amount = amount;
-    this.payments = []; // Initialize empty payments list
     this.bookingTime = new Date();
-    this.status = TicketStatus.BOOKED;
+    this.user = user;
+    this.show = show;
+    this.seats = seats;
+    this.payments = [];
+    this.status = TicketStatus.PROCESSING; // Default to processing
   }
 
   // Method to add a payment
   addPayment(payment: Payment): void {
     this.payments.push(payment);
+
+    // If all payments complete, update status
+    if (this.getTotalPaidAmount() >= this.amount) {
+      this.status = TicketStatus.BOOKED;
+    }
+  }
+
+  // Calculate total paid amount
+  getTotalPaidAmount(): number {
+    return this.payments
+      .filter(
+        (p) => p.status === PaymentStatus.SUCCESS && p.type === PaymentType.PAY
+      )
+      .reduce((sum, p) => sum + p.amount, 0);
   }
 }
 

@@ -1,32 +1,37 @@
-import { Ticket } from './ticket';
 import { BaseModel } from './baseModel';
+import { Ticket } from './ticket';
 
 interface User extends BaseModel {
+  age: number; // Added age
   name: string;
   email: string;
-  password: string; // Added password
+  password: string;
   phoneNumber: string;
   tickets: Ticket[];
 }
 
 class UserModel implements User {
   id: string;
+  age: number;
   name: string;
   email: string;
   password: string;
   phoneNumber: string;
   tickets: Ticket[];
+
   constructor(
     id: string,
     name: string,
+    age: number,
     email: string,
     password: string,
     phoneNumber: string
   ) {
     this.id = id;
+    this.age = age;
     this.name = name;
     this.email = email;
-    this.password = password; // Should be hashed in a real implementation
+    this.password = password; // In a real app, this should be hashed
     this.phoneNumber = phoneNumber;
     this.tickets = [];
   }

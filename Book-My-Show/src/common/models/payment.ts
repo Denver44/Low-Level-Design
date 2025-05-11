@@ -1,42 +1,45 @@
+import { BaseModel } from './baseModel';
+import { PaymentProvider } from './paymentProvider';
 import { PaymentStatus } from './paymentStatus';
 import { PaymentType } from './paymentType';
-import { BaseModel } from './baseModel';
+import { Ticket } from './ticket'; // Added for ticket reference
 
 interface Payment extends BaseModel {
   amount: number;
-  type: PaymentType; // Added type (PAY or REFUND)
-  paymentMethod: string;
-  provider: string;
+  type: PaymentType;
+  provider: PaymentProvider; // Changed to use enum
   transactionTime: Date;
   referenceId: string;
   status: PaymentStatus;
+  ticket?: Ticket; // Added ticket reference
 }
 
 class PaymentModel implements Payment {
   id: string;
   amount: number;
   type: PaymentType;
-  paymentMethod: string;
-  provider: string;
+  provider: PaymentProvider;
   transactionTime: Date;
   referenceId: string;
   status: PaymentStatus;
+  ticket?: Ticket;
+
   constructor(
     id: string,
     amount: number,
     type: PaymentType,
-    paymentMethod: string,
-    provider: string,
-    referenceId: string
+    provider: PaymentProvider,
+    referenceId: string,
+    ticket?: Ticket
   ) {
     this.id = id;
     this.amount = amount;
     this.type = type;
-    this.paymentMethod = paymentMethod;
     this.provider = provider;
     this.transactionTime = new Date();
     this.referenceId = referenceId;
     this.status = PaymentStatus.PENDING;
+    this.ticket = ticket;
   }
 }
 
