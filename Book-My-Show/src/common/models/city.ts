@@ -4,7 +4,7 @@ import { BaseEntity } from './baseEntity';
 
 @Entity('cities')
 export class City extends BaseEntity {
-  @Column()
+  @Column('varchar')
   name!: string;
 
   @OneToMany(() => Theater, (theater) => theater.city)

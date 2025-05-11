@@ -14,7 +14,7 @@ import { Theater } from './theater';
 
 @Entity('auditoriums')
 export class Auditorium extends BaseEntity {
-  @Column()
+  @Column('varchar')
   name!: string;
 
   @ManyToOne(() => Theater, (theater) => theater.auditoriums)

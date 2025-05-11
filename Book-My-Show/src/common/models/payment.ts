@@ -24,8 +24,7 @@ export class Payment extends BaseEntity {
 
   @CreateDateColumn()
   transactionTime!: Date;
-
-  @Column()
+  @Column('varchar')
   referenceId!: string;
 
   @Column({

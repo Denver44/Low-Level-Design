@@ -4,19 +4,19 @@ import { BaseEntity } from './baseEntity';
 
 @Entity('users')
 export class User extends BaseEntity {
-  @Column()
+  @Column('varchar')
   name!: string;
 
-  @Column()
+  @Column('int')
   age!: number;
 
-  @Column({ unique: true })
+  @Column('varchar', { unique: true })
   email!: string;
 
-  @Column()
+  @Column('varchar')
   password!: string; // In production, this should be hashed
 
-  @Column()
+  @Column('varchar')
   phoneNumber!: string;
 
   @OneToMany(() => Ticket, (ticket) => ticket.user)

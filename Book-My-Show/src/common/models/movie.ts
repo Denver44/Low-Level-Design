@@ -3,19 +3,19 @@ import { BaseEntity } from './baseEntity';
 
 @Entity('movies')
 export class Movie extends BaseEntity {
-  @Column()
+  @Column('varchar')
   title!: string;
 
   @Column('simple-array')
   languages!: string[];
 
-  @Column()
+  @Column('int')
   duration!: number;
 
-  @Column()
+  @Column('varchar')
   genre!: string;
 
-  @Column()
+  @Column('varchar')
   rating!: string;
 
   @Column('simple-array')
@@ -23,13 +23,12 @@ export class Movie extends BaseEntity {
 
   @Column('simple-array', { nullable: true })
   cast?: string[];
-
-  @Column()
+  @Column('date')
   releaseDate!: Date;
 
-  @Column()
+  @Column('date')
   endDate!: Date;
 
-  @Column()
+  @Column('varchar')
   language!: string; // Default language for backward compatibility
 }

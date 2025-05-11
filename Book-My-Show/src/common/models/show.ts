@@ -10,13 +10,13 @@ export class Show extends BaseEntity {
   @ManyToOne(() => Movie)
   movie!: Movie;
 
-  @Column()
+  @Column('timestamp')
   startTime!: Date;
 
-  @Column()
+  @Column('timestamp')
   endTime!: Date;
 
-  @Column()
+  @Column('varchar')
   language!: string;
 
   @Column('simple-array')

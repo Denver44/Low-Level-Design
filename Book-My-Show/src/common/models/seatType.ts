@@ -3,9 +3,9 @@ import { BaseEntity } from './baseEntity';
 
 @Entity('seat_types')
 export class SeatType extends BaseEntity {
-  @Column()
+  @Column('varchar')
   name!: string;
 
-  @Column({ nullable: true })
+  @Column('varchar', { nullable: true })
   description?: string;
 }

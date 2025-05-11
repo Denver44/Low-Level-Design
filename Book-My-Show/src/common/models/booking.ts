@@ -18,7 +18,6 @@ export class Booking extends BaseEntity {
 
   @Column('decimal', { precision: 10, scale: 2 })
   totalAmount!: number;
-
-  @Column()
+  @Column('varchar')
   transactionId!: string;
 }

@@ -5,13 +5,13 @@ import { BaseEntity } from './baseEntity';
 
 @Entity('seats')
 export class Seat extends BaseEntity {
-  @Column()
+  @Column('varchar')
   seatNumber!: string;
 
-  @Column()
+  @Column('int')
   row!: number;
 
-  @Column()
+  @Column('int')
   column!: number;
 
   @ManyToOne(() => SeatType)
