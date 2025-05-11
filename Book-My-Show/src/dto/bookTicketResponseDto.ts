@@ -4,6 +4,11 @@ export class BookTicketResponseDto {
   amount!: number;
   status!: string;
   showId!: string;
-  seatIds!: string[];
+  seats!: {
+    id: string;
+    seatNumber: string;
+    type: string;
+  }[];
   bookingTime!: Date;
+  auditoriumName?: string; // Optional as mentioned in the note
 }
