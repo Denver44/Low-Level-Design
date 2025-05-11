@@ -1,11 +1,12 @@
 // src/controllers/ticketController.ts
 import { Request, Response } from 'express';
 import { TicketService } from '../services/ticketService';
-import { BookTicketRequestDto } from '../../dto/bookTicketRequestDto';
-import { BookTicketResponseDto } from '../../dto/bookTicketResponseDto';
+import { BookTicketRequestDto } from '../../dtos/bookTicketRequestDto';
+import { BookTicketResponseDto } from '../../dtos/bookTicketResponseDto';
+import { InvalidArgumentException } from '../../exceptions/invalidArgumentException';
+import { SeatNotAvailableException } from '../../exceptions/seatNotAvailableException';
 
 export class TicketController {
-  // Constructor injection for better testability
   constructor(private ticketService: TicketService) {}
 
   async bookTicket(req: Request, res: Response): Promise<void> {
@@ -32,7 +33,7 @@ export class TicketController {
         request.seatIds
       );
 
-      // Map service response to DTO
+      // Map service response to DTO - focus on returning all relevant ticket info
       const response: BookTicketResponseDto = {
         ticketId: ticket.id,
         amount: ticket.amount,
@@ -45,19 +46,20 @@ export class TicketController {
         })),
         bookingTime: ticket.bookingTime,
         auditoriumName: ticket.show.auditorium?.name,
+        movieName: ticket.show.movie?.title,
+        showTime: ticket.show.startTime,
       };
 
+      // Return 201 (Created) for successful ticket creation
       res.status(201).json(response);
-    } catch (error: any) {
-      // Error handling simplified to controller responsibility
-      if (error.message === 'User or Show not found') {
-        res.status(404).json({ error: error.message });
-      } else if (
-        error.message === 'Some seats are not available' ||
-        error.message === 'Some seats not found'
-      ) {
-        res.status(409).json({ error: error.message });
+    } catch (error) {
+      // Handle different types of exceptions with appropriate HTTP status codes
+      if (error instanceof InvalidArgumentException) {
+        res.status(400).json({ error: error.message }); // Bad Request
+      } else if (error instanceof SeatNotAvailableException) {
+        res.status(409).json({ error: error.message }); // Conflict
       } else {
+        console.error('Unexpected error during ticket booking:', error);
         res.status(500).json({ error: 'Internal server error' });
       }
     }

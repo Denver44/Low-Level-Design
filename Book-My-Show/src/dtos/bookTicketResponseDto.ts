@@ -10,5 +10,7 @@ export class BookTicketResponseDto {
     type: string;
   }[];
   bookingTime!: Date;
-  auditoriumName?: string; // Optional as mentioned in the note
+  auditoriumName?: string;
+  movieName?: string;
+  showTime?: Date;
 }
