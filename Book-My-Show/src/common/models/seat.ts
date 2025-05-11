@@ -1,19 +1,12 @@
 import { Auditorium } from './auditorium';
 import { SeatType } from './seatType';
 
-enum SeatStatus {
-  AVAILABLE = 'AVAILABLE',
-  BOOKED = 'BOOKED',
-  RESERVED = 'RESERVED',
-}
-
 interface Seat {
   seatId: string;
   seatNumber: string;
-  row: number; // Added row
-  column: number; // Added column
-  seatType: SeatType;
-  status: SeatStatus;
+  row: number;
+  column: number;
+  seatType: SeatType; // Make sure this references SeatType
   auditorium: Auditorium;
 }
 
@@ -23,7 +16,6 @@ class SeatModel implements Seat {
   row: number;
   column: number;
   seatType: SeatType;
-  status: SeatStatus;
   auditorium: Auditorium;
 
   constructor(
@@ -39,9 +31,8 @@ class SeatModel implements Seat {
     this.row = row;
     this.column = column;
     this.seatType = seatType;
-    this.status = SeatStatus.AVAILABLE;
     this.auditorium = auditorium;
   }
 }
 
-export { SeatStatus, Seat, SeatModel };
+export { Seat, SeatModel };

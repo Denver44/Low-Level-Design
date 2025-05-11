@@ -1,40 +1,41 @@
-// From Note 4: Movie class
+// src/models/movie.ts
+
 interface Movie {
   movieId: string;
-  title: string;
+  name: string;
+  languages: string[]; // List of languages
+  duration: number;
   genre: string;
-  duration: number; // in minutes
-  language: string;
-  rating: number;
+  rating: string; // Age rating (U, UA, A)
   features: string[]; // e.g., 2D, 3D, IMAX, Dolby
   cast?: string[]; // optional
 }
 
 class MovieModel implements Movie {
   movieId: string;
-  title: string;
-  genre: string;
+  name: string;
+  languages: string[];
   duration: number;
-  language: string;
-  rating: number;
+  genre: string;
+  rating: string;
   features: string[];
   cast?: string[];
 
   constructor(
     movieId: string,
-    title: string,
-    genre: string,
+    name: string,
+    languages: string[],
     duration: number,
-    language: string,
-    rating: number,
+    genre: string,
+    rating: string,
     features: string[],
     cast?: string[]
   ) {
     this.movieId = movieId;
-    this.title = title;
-    this.genre = genre;
+    this.name = name;
+    this.languages = languages;
     this.duration = duration;
-    this.language = language;
+    this.genre = genre;
     this.rating = rating;
     this.features = features;
     this.cast = cast;
