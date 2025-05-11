@@ -1,12 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, Column, ManyToOne } from 'typeorm';
 import { Auditorium } from './auditorium';
 import { SeatType } from './seatType';
+import { BaseEntity } from './baseEntity';
 
 @Entity('seats')
-export class Seat {
-  @PrimaryGeneratedColumn('uuid')
-  id!: string;
-
+export class Seat extends BaseEntity {
   @Column()
   seatNumber!: string;
 

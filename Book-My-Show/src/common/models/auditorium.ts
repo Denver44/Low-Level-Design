@@ -1,22 +1,19 @@
 import {
   Entity,
-  PrimaryGeneratedColumn,
   Column,
   ManyToOne,
   OneToMany,
   ManyToMany,
   JoinTable,
 } from 'typeorm';
+import { BaseEntity } from './baseEntity';
 import { Feature } from './feature';
 import { Seat } from './seat';
 import { Show } from './show';
 import { Theater } from './theater';
 
 @Entity('auditoriums')
-export class Auditorium {
-  @PrimaryGeneratedColumn('uuid')
-  id!: string;
-
+export class Auditorium extends BaseEntity {
   @Column()
   name!: string;
 

@@ -1,11 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, Column } from 'typeorm';
 import { FeatureType } from './FeatureType';
+import { BaseEntity } from './baseEntity';
 
 @Entity('features')
-export class Feature {
-  @PrimaryGeneratedColumn('uuid')
-  id!: string;
-
+export class Feature extends BaseEntity {
   @Column({
     type: 'enum',
     enum: FeatureType,

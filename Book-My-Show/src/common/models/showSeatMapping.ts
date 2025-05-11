@@ -1,13 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, Column, ManyToOne } from 'typeorm';
 import { SeatType } from './seatType';
 import { Show } from './show';
 import { SeatStatus } from './SeatStatus';
+import { BaseEntity } from './baseEntity';
 
 @Entity('show_seat_mappings')
-export class ShowSeatMapping {
-  @PrimaryGeneratedColumn('uuid')
-  mappingId!: string;
-
+export class ShowSeatMapping extends BaseEntity {
   @ManyToOne(() => Show)
   show!: Show;
 

@@ -1,6 +1,5 @@
 import {
   Entity,
-  PrimaryGeneratedColumn,
   Column,
   ManyToOne,
   OneToMany,
@@ -13,12 +12,10 @@ import { Seat } from './seat';
 import { Show } from './show';
 import { User } from './user';
 import { TicketStatus } from './ticketStatus';
+import { BaseEntity } from './baseEntity';
 
 @Entity('tickets')
-export class Ticket {
-  @PrimaryGeneratedColumn('uuid')
-  id!: string;
-
+export class Ticket extends BaseEntity {
   @Column('decimal', { precision: 10, scale: 2 })
   amount!: number;
 

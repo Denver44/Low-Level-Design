@@ -1,20 +1,11 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToOne,
-  ManyToMany,
-  JoinTable,
-} from 'typeorm';
+import { Entity, Column, ManyToOne, ManyToMany, JoinTable } from 'typeorm';
 import { Seat } from './seat';
 import { Show } from './show';
 import { User } from './user';
+import { BaseEntity } from './baseEntity';
 
 @Entity('bookings')
-export class Booking {
-  @PrimaryGeneratedColumn('uuid')
-  id!: string;
-
+export class Booking extends BaseEntity {
   @ManyToOne(() => User)
   user!: User;
 

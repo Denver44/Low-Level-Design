@@ -1,20 +1,12 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToOne,
-  CreateDateColumn,
-} from 'typeorm';
+import { Entity, Column, ManyToOne, CreateDateColumn } from 'typeorm';
 import { Ticket } from './ticket';
 import { PaymentType } from './PaymentType';
 import { PaymentProvider } from './PaymentProvider';
 import { PaymentStatus } from './PaymentStatus';
+import { BaseEntity } from './baseEntity';
 
 @Entity('payments')
-export class Payment {
-  @PrimaryGeneratedColumn('uuid')
-  id!: string;
-
+export class Payment extends BaseEntity {
   @Column('decimal', { precision: 10, scale: 2 })
   amount!: number;
 

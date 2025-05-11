@@ -1,11 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Entity, Column, OneToMany } from 'typeorm';
 import { Theater } from './theater';
+import { BaseEntity } from './baseEntity';
 
 @Entity('cities')
-export class City {
-  @PrimaryGeneratedColumn('uuid')
-  id!: string; // Note the '!' operator
-
+export class City extends BaseEntity {
   @Column()
   name!: string;
 
