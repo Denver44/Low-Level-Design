@@ -1,6 +1,6 @@
 import { Auditorium } from './auditorium';
+import { SeatType } from './seatType';
 
-// From Note 5: SeatStatus enum
 enum SeatStatus {
   AVAILABLE = 'AVAILABLE',
   BOOKED = 'BOOKED',
@@ -10,7 +10,9 @@ enum SeatStatus {
 interface Seat {
   seatId: string;
   seatNumber: string;
-  seatType: string; // e.g., VIP, Regular
+  row: number; // Added row
+  column: number; // Added column
+  seatType: SeatType;
   status: SeatStatus;
   auditorium: Auditorium;
 }
@@ -18,18 +20,24 @@ interface Seat {
 class SeatModel implements Seat {
   seatId: string;
   seatNumber: string;
-  seatType: string;
+  row: number;
+  column: number;
+  seatType: SeatType;
   status: SeatStatus;
   auditorium: Auditorium;
 
   constructor(
     seatId: string,
     seatNumber: string,
-    seatType: string,
+    row: number,
+    column: number,
+    seatType: SeatType,
     auditorium: Auditorium
   ) {
     this.seatId = seatId;
     this.seatNumber = seatNumber;
+    this.row = row;
+    this.column = column;
     this.seatType = seatType;
     this.status = SeatStatus.AVAILABLE;
     this.auditorium = auditorium;

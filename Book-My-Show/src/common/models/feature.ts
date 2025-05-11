@@ -1,0 +1,9 @@
+enum Feature {
+  IMAX = 'IMAX',
+  THREE_D = '3D',
+  DOLBY_ATMOS = 'DOLBY_ATMOS',
+  DOLBY_VISION = 'DOLBY_VISION',
+  HIGH_DEFINITION_SOUND = 'HIGH_DEFINITION_SOUND',
+}
+
+export { Feature };

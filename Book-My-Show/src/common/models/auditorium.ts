@@ -1,3 +1,4 @@
+import { Feature } from './feature';
 import { Seat } from './seat';
 import { Show } from './show';
 import { Theater } from './theater';
@@ -8,6 +9,7 @@ interface Auditorium {
   theater: Theater;
   seats: Seat[];
   shows: Show[];
+  features: Feature[]; // Added features list
 }
 
 class AuditoriumModel implements Auditorium {
@@ -16,6 +18,7 @@ class AuditoriumModel implements Auditorium {
   theater: Theater;
   seats: Seat[];
   shows: Show[];
+  features: Feature[]; // Added features list
 
   constructor(auditoriumId: string, name: string, theater: Theater) {
     this.auditoriumId = auditoriumId;
@@ -23,6 +26,7 @@ class AuditoriumModel implements Auditorium {
     this.theater = theater;
     this.seats = [];
     this.shows = [];
+    this.features = [];
   }
 }
 
