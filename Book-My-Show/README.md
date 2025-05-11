@@ -1,119 +1,93 @@
-# 🚀 Express TypeScript Boilerplate 2025
+# BookMyShow Clone
 
-[![CI](https://github.com/edwinhern/express-typescript/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/edwinhern/express-typescript-2024/actions/workflows/ci.yml)
+A robust movie ticket booking system built with TypeScript, Express, and TypeORM.
 
-```code
-Hey There! 🙌
-🤾 that ⭐️ button if you like this boilerplate.
-```
+## Features
 
-## 🌟 Introduction
+- User registration and authentication
+- Browse movies, theaters, and shows
+- Seat selection and booking
+- Ticket management
+- Payment processing (placeholder)
 
-Welcome to Express TypeScript Boilerplate 2025 – a simple and ready-to-use starting point for building backend web services with Express.js and TypeScript.
+## Technical Features
 
-## 💡 Why We Made This
+- Clean architecture with separation of concerns
+- Transaction management for data consistency
+- Pessimistic locking to prevent concurrent bookings
+- Custom exception handling
+- Strategy pattern for pricing calculation
+- RESTful API design
 
-This starter kit helps you:
+## Getting Started
 
-- ✨ Start new projects faster
-- 📊 Write clean, consistent code
-- ⚡ Build things quickly
-- 🛡️ Follow best practices for security and testing
+### Prerequisites
 
-## 🚀 What's Included
+- Node.js (v14+)
+- MySQL (v8+)
+- npm or pnpm
 
-- 📁 Well-organized folders: Files grouped by feature so you can find things easily
-- 💨 Fast development: Quick code running with `tsx` and error checking with `tsc`
-- 🌐 Latest Node.js: Uses the newest stable Node.js version from `.tool-versions`
-- 🔧 Safe settings: Environment settings checked with Zod to prevent errors
-- 🔗 Short import paths: Clean code with easy imports using path shortcuts
-- 🔄 Auto-updates: Keeps dependencies up-to-date with Renovate
-- 🔒 Better security: Built-in protection with Helmet and CORS settings
-- 📊 Easy tracking: Built-in logging with `pino-http`
-- 🧪 Ready-to-test: Testing tools with Vitest and Supertest already set up
-- ✅ Clean code: Consistent coding style with `Biomejs`
-- 📃 Standard responses: Unified API responses using `ServiceResponse`
-- 🐳 Easy deployment: Ready for Docker containers
-- 📝 Input checking: Request validation using Zod
-- 🧩 API browser: Interactive API docs with Swagger UI
+### Installation
 
-## 🛠️ Getting Started
+1. Clone the repository:
 
-### Video Demo
+   ```bash
+   git clone https://github.com/yourusername/bookmyshow-clone.git
+   cd bookmyshow-clone
+   ```
 
-For a visual guide, watch the [video demo](https://github.com/user-attachments/assets/b1698dac-d582-45a0-8d61-31131732b74e) to see the setup and running of the project.
+2. Install dependencies:
 
-### Step-by-Step Guide
+   ```bash
+   pnpm install
+   ```
 
-#### Step 1: 🚀 Initial Setup
+3. Set up environment variables:
 
-- Clone the repository: `git clone https://github.com/edwinhern/express-typescript.git`
-- Navigate: `cd express-typescript`
-- Install dependencies: `pnpm install`
+   ```bash
+   # Create a .env file with the following:
+   PORT=3000
+   HOST=localhost
+   NODE_ENV=development
+   CORS_ORIGIN=*
 
-#### Step 2: ⚙️ Environment Configuration
+   # Database config
+   DB_HOST=localhost
+   DB_PORT=3306
+   DB_USERNAME=root
+   DB_PASSWORD=yourpassword
+   DB_NAME=bookmyshow
+   ```
 
-- Create `.env`: Copy `.env.template` to `.env`
-- Update `.env`: Fill in necessary environment variables
+4. Start the development server:
 
-#### Step 3: 🏃‍♂️ Running the Project
+   ```bash
+   pnpm start:dev
+   ```
 
-- Development Mode: `pnpm start:dev`
-- Building: `pnpm build`
-- Production Mode: Set `NODE_ENV="production"` in `.env` then `pnpm build && pnpm start:prod`
+## API Endpoints
 
-## 🤝 Feedback and Contributions
+- `POST /api/tickets` - Book a ticket
+- `GET /api/tickets/:id` - Get ticket details
+- `GET /api/shows` - Get list of shows
+- `GET /api/shows/:id/seats` - Get available seats for a show
 
-We'd love to hear your feedback and suggestions for further improvements. Feel free to contribute and join us in making backend development cleaner and faster!
+## Future Enhancements
 
-🎉 Happy coding!
+- Payment gateway integration
+- Caching with Redis
+- Microservices architecture
+- Advanced security with JWT
+- Push notifications for booking confirmations
 
-## 📁 Folder Structure
+---
 
-```code
-├── biome.json
-├── Dockerfile
-├── LICENSE
-├── package.json
-├── pnpm-lock.yaml
-├── README.md
-├── src
-│   ├── api
-│   │   ├── healthCheck
-│   │   │   ├── __tests__
-│   │   │   │   └── healthCheckRouter.test.ts
-│   │   │   └── healthCheckRouter.ts
-│   │   └── user
-│   │       ├── __tests__
-│   │       │   ├── userRouter.test.ts
-│   │       │   └── userService.test.ts
-│   │       ├── userController.ts
-│   │       ├── userModel.ts
-│   │       ├── userRepository.ts
-│   │       ├── userRouter.ts
-│   │       └── userService.ts
-│   ├── api-docs
-│   │   ├── __tests__
-│   │   │   └── openAPIRouter.test.ts
-│   │   ├── openAPIDocumentGenerator.ts
-│   │   ├── openAPIResponseBuilders.ts
-│   │   └── openAPIRouter.ts
-│   ├── common
-│   │   ├── __tests__
-│   │   │   ├── errorHandler.test.ts
-│   │   │   └── requestLogger.test.ts
-│   │   ├── middleware
-│   │   │   ├── errorHandler.ts
-│   │   │   ├── rateLimiter.ts
-│   │   │   └── requestLogger.ts
-│   │   ├── models
-│   │   │   └── serviceResponse.ts
-│   │   └── utils
-│   │       ├── commonValidation.ts
-│   │       ├── envConfig.ts
-│   │       └── httpHandlers.ts
-│   ├── index.ts
-│   └── server.ts
-├── tsconfig.json
-└── vite.config.mts
-```
+These final code changes complete your BookMyShow implementation with:
+
+1. Proper exception handling using a global exception handler
+2. A flexible pricing strategy pattern
+3. Robust transaction management and pessimistic locking
+4. Clean architecture with separation of concerns
+5. Documentation for future enhancements
+
+This implementation follows the best practices described throughout all the notes while adapting them to TypeScript, Express, and TypeORM.

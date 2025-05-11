@@ -7,7 +7,8 @@ import { pino } from 'pino';
 import { openAPIRouter } from '@/api-docs/openAPIRouter';
 import { healthCheckRouter } from '@/api/healthCheck/healthCheckRouter';
 import { userRouter } from '@/api/user/userRouter';
-import apiRoutes from '@/common/routes/index'; // Import the main routes file
+import apiRoutes from '@/common/routes/index';
+import { globalExceptionHandler } from '@/middlewares/globalExceptionHandler';
 import errorHandler from '@/common/middleware/errorHandler';
 import rateLimiter from '@/common/middleware/rateLimiter';
 import requestLogger from '@/common/middleware/requestLogger';
@@ -32,12 +33,13 @@ app.use(requestLogger);
 // Routes
 app.use('/health-check', healthCheckRouter);
 app.use('/users', userRouter);
-app.use('/api', apiRoutes); // Use the main API routes
+app.use('/api', apiRoutes);
 
 // Swagger UI
 app.use(openAPIRouter);
 
 // Error handlers
+app.use(globalExceptionHandler); // Add global exception handler
 app.use(errorHandler());
 
 export { app, logger };

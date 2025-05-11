@@ -7,7 +7,6 @@ import { Show } from '../models/show';
 import { Seat } from '../models/seat';
 import { SeatStatus } from '../models/SeatStatus';
 import { TicketStatus } from '../models/ticketStatus';
-import { ShowSeatType } from '../models/showSeatType';
 import { SeatRepository } from '../repositories/seatRepository';
 import { ShowSeatRepository } from '../repositories/showSeatRepository';
 import { ShowRepository } from '../repositories/showRepository';
@@ -15,6 +14,8 @@ import { UserRepository } from '../repositories/userRepository';
 import { TicketRepository } from '../repositories/ticketRepository';
 import { InvalidArgumentException } from '../../exceptions/invalidArgumentException';
 import { SeatNotAvailableException } from '../../exceptions/seatNotAvailableException';
+import { PricingStrategy } from '../../strategies/pricingStrategy';
+import { BasicPricingStrategy } from '../../strategies/basicPricingStrategy';
 
 export class TicketService {
   private seatRepository: SeatRepository;
@@ -22,6 +23,7 @@ export class TicketService {
   private showRepository: ShowRepository;
   private userRepository: UserRepository;
   private ticketRepository: TicketRepository;
+  private pricingStrategy: PricingStrategy;
 
   constructor(private dataSource: DataSource) {
     this.seatRepository = new SeatRepository(dataSource);
@@ -29,6 +31,7 @@ export class TicketService {
     this.showRepository = new ShowRepository(dataSource);
     this.userRepository = new UserRepository(dataSource);
     this.ticketRepository = new TicketRepository(dataSource);
+    this.pricingStrategy = new BasicPricingStrategy(dataSource);
   }
 
   async createTicket(
@@ -86,8 +89,8 @@ export class TicketService {
         where: { id: In(seatIds) },
       });
 
-      // 7. Calculate the ticket amount with taxes and fees
-      const totalAmount = await this.calculateAmount(showSeats, queryRunner);
+      // 7. Calculate the ticket amount using pricing strategy
+      const totalAmount = await this.pricingStrategy.calculateAmount(showSeats);
 
       // 8. Create and save the Ticket
       const ticket = new Ticket();
@@ -114,48 +117,5 @@ export class TicketService {
       // Release the query runner
       await queryRunner.release();
     }
-  }
-
-  private async calculateAmount(
-    showSeats: ShowSeat[],
-    queryRunner: any
-  ): Promise<number> {
-    let baseAmount = 0;
-
-    // Get unique seat type IDs from the show seats
-    const seatTypeIds = [
-      ...new Set(showSeats.map((showSeat) => showSeat.seat.seatType.id)),
-    ];
-
-    // Get all relevant show seat types with prices
-    const showSeatTypes = await queryRunner.manager.find(ShowSeatType, {
-      where: {
-        show: { id: showSeats[0].show.id },
-        seatType: { id: In(seatTypeIds) },
-      },
-      relations: ['seatType'],
-    });
-
-    // Create a price map for quick lookup
-    const priceMap = new Map<string, number>();
-    showSeatTypes.forEach((sst) => {
-      priceMap.set(sst.seatType.id, sst.price);
-    });
-
-    // Calculate base amount
-    for (const showSeat of showSeats) {
-      const seatTypeId = showSeat.seat.seatType.id;
-      const price = priceMap.get(seatTypeId) || 0;
-      baseAmount += price;
-    }
-
-    // Apply taxes (18% GST)
-    const gst = baseAmount * 0.18;
-
-    // Apply convenience fee (flat fee)
-    const convenienceFee = 20.0;
-
-    // Final amount
-    return baseAmount + gst + convenienceFee;
   }
 }
