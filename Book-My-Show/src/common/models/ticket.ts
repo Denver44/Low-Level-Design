@@ -3,9 +3,9 @@ import { Seat } from './seat';
 import { Show } from './show';
 import { TicketStatus } from './ticketStatus';
 import { User } from './user';
+import { BaseModel } from './baseModel';
 
-interface Ticket {
-  ticketId: string;
+interface Ticket extends BaseModel {
   show: Show;
   user: User;
   seats: Seat[];
@@ -16,7 +16,7 @@ interface Ticket {
 }
 
 class TicketModel implements Ticket {
-  ticketId: string;
+  id: string;
   show: Show;
   user: User;
   seats: Seat[];
@@ -24,15 +24,14 @@ class TicketModel implements Ticket {
   payments: Payment[];
   bookingTime: Date;
   status: TicketStatus;
-
   constructor(
-    ticketId: string,
+    id: string,
     show: Show,
     user: User,
     seats: Seat[],
     amount: number
   ) {
-    this.ticketId = ticketId;
+    this.id = id;
     this.show = show;
     this.user = user;
     this.seats = seats;

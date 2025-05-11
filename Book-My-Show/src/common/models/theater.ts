@@ -1,8 +1,8 @@
 import { Auditorium } from './auditorium';
 import { City } from './city';
+import { BaseModel } from './baseModel';
 
-interface Theater {
-  theaterId: string;
+interface Theater extends BaseModel {
   theaterName: string;
   address: string; // Added address
   city: City;
@@ -10,19 +10,13 @@ interface Theater {
 }
 
 class TheaterModel implements Theater {
-  theaterId: string;
+  id: string;
   theaterName: string;
   address: string;
   city: City;
   auditoriums: Auditorium[];
-
-  constructor(
-    theaterId: string,
-    theaterName: string,
-    address: string,
-    city: City
-  ) {
-    this.theaterId = theaterId;
+  constructor(id: string, theaterName: string, address: string, city: City) {
+    this.id = id;
     this.theaterName = theaterName;
     this.address = address;
     this.city = city;

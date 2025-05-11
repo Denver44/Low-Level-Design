@@ -1,17 +1,18 @@
 // From Note 4: SeatType class
-interface SeatType {
-  seatTypeId: string;
+import { BaseModel } from './baseModel';
+
+interface SeatType extends BaseModel {
   name: string;
   description?: string; // Optional field
 }
 
 class SeatTypeModel implements SeatType {
-  seatTypeId: string;
+  id: string;
   name: string;
   description?: string;
 
-  constructor(seatTypeId: string, name: string, description?: string) {
-    this.seatTypeId = seatTypeId;
+  constructor(id: string, name: string, description?: string) {
+    this.id = id;
     this.name = name;
     this.description = description;
   }

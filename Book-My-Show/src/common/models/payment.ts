@@ -1,8 +1,8 @@
 import { PaymentStatus } from './paymentStatus';
 import { PaymentType } from './paymentType';
+import { BaseModel } from './baseModel';
 
-interface Payment {
-  paymentId: string;
+interface Payment extends BaseModel {
   amount: number;
   type: PaymentType; // Added type (PAY or REFUND)
   paymentMethod: string;
@@ -13,7 +13,7 @@ interface Payment {
 }
 
 class PaymentModel implements Payment {
-  paymentId: string;
+  id: string;
   amount: number;
   type: PaymentType;
   paymentMethod: string;
@@ -21,16 +21,15 @@ class PaymentModel implements Payment {
   transactionTime: Date;
   referenceId: string;
   status: PaymentStatus;
-
   constructor(
-    paymentId: string,
+    id: string,
     amount: number,
     type: PaymentType,
     paymentMethod: string,
     provider: string,
     referenceId: string
   ) {
-    this.paymentId = paymentId;
+    this.id = id;
     this.amount = amount;
     this.type = type;
     this.paymentMethod = paymentMethod;

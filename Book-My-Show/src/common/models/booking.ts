@@ -1,9 +1,9 @@
 // From Note 5: Booking class
 import { Seat } from './seat';
 import { Show } from './show';
+import { BaseModel } from './baseModel';
 
-interface Booking {
-  bookingId: string;
+interface Booking extends BaseModel {
   userId: string;
   show: Show;
   seats: Seat[];
@@ -12,22 +12,21 @@ interface Booking {
 }
 
 class BookingModel implements Booking {
-  bookingId: string;
+  id: string;
   userId: string;
   show: Show;
   seats: Seat[];
   totalAmount: number;
   transactionId: string;
-
   constructor(
-    bookingId: string,
+    id: string,
     userId: string,
     show: Show,
     seats: Seat[],
     totalAmount: number,
     transactionId: string
   ) {
-    this.bookingId = bookingId;
+    this.id = id;
     this.userId = userId;
     this.show = show;
     this.seats = seats;

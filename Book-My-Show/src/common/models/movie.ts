@@ -1,9 +1,10 @@
 // src/models/movie.ts
+import { BaseModel } from './baseModel';
+import { Language } from './language';
 
-interface Movie {
-  movieId: string;
+interface Movie extends BaseModel {
   name: string;
-  languages: string[]; // List of languages
+  languages: Language[]; // Updated to use Language enum
   duration: number;
   genre: string;
   rating: string; // Age rating (U, UA, A)
@@ -12,26 +13,25 @@ interface Movie {
 }
 
 class MovieModel implements Movie {
-  movieId: string;
+  id: string;
   name: string;
-  languages: string[];
+  languages: Language[];
   duration: number;
   genre: string;
   rating: string;
   features: string[];
   cast?: string[];
-
   constructor(
-    movieId: string,
+    id: string,
     name: string,
-    languages: string[],
+    languages: Language[],
     duration: number,
     genre: string,
     rating: string,
     features: string[],
     cast?: string[]
   ) {
-    this.movieId = movieId;
+    this.id = id;
     this.name = name;
     this.languages = languages;
     this.duration = duration;

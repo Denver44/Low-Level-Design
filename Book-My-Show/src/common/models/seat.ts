@@ -1,8 +1,8 @@
 import { Auditorium } from './auditorium';
 import { SeatType } from './seatType';
+import { BaseModel } from './baseModel';
 
-interface Seat {
-  seatId: string;
+interface Seat extends BaseModel {
   seatNumber: string;
   row: number;
   column: number;
@@ -11,22 +11,21 @@ interface Seat {
 }
 
 class SeatModel implements Seat {
-  seatId: string;
+  id: string;
   seatNumber: string;
   row: number;
   column: number;
   seatType: SeatType;
   auditorium: Auditorium;
-
   constructor(
-    seatId: string,
+    id: string,
     seatNumber: string,
     row: number,
     column: number,
     seatType: SeatType,
     auditorium: Auditorium
   ) {
-    this.seatId = seatId;
+    this.id = id;
     this.seatNumber = seatNumber;
     this.row = row;
     this.column = column;
