@@ -1,5 +1,5 @@
 // src/services/ticketService.ts
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, In } from 'typeorm';
 import { Ticket } from '../models/ticket';
 import { ShowSeat } from '../models/showSeat';
 import { User } from '../models/user';
@@ -7,21 +7,16 @@ import { Show } from '../models/show';
 import { SeatStatus } from '../models/SeatStatus';
 import { TicketStatus } from '../models/ticketStatus';
 import { ShowSeatType } from '../models/showSeatType';
-import { In } from 'typeorm';
+import { SeatRepository } from '../repositories/seatRepository';
+import { ShowSeatRepository } from '../repositories/showSeatRepository';
 
 export class TicketService {
-  private ticketRepository: Repository<Ticket>;
-  private showSeatRepository: Repository<ShowSeat>;
-  private userRepository: Repository<User>;
-  private showRepository: Repository<Show>;
-  private showSeatTypeRepository: Repository<ShowSeatType>;
+  private seatRepository: SeatRepository;
+  private showSeatRepository: ShowSeatRepository;
 
   constructor(private dataSource: DataSource) {
-    this.ticketRepository = dataSource.getRepository(Ticket);
-    this.showSeatRepository = dataSource.getRepository(ShowSeat);
-    this.userRepository = dataSource.getRepository(User);
-    this.showRepository = dataSource.getRepository(Show);
-    this.showSeatTypeRepository = dataSource.getRepository(ShowSeatType);
+    this.seatRepository = new SeatRepository(dataSource);
+    this.showSeatRepository = new ShowSeatRepository(dataSource);
   }
 
   async createTicket(
@@ -36,15 +31,18 @@ export class TicketService {
 
     try {
       // 1. Find user and show
-      const user = await this.userRepository.findOneBy({ id: userId });
-      const show = await this.showRepository.findOneBy({ id: showId });
+      const userRepository = queryRunner.manager.getRepository(User);
+      const showRepository = queryRunner.manager.getRepository(Show);
+
+      const user = await userRepository.findOneBy({ id: userId });
+      const show = await showRepository.findOneBy({ id: showId });
 
       if (!user || !show) {
         throw new Error('User or Show not found');
       }
 
-      // 2. Get ShowSeat objects and check availability
-      const showSeats = await this.showSeatRepository.find({
+      // 2. Get ShowSeat objects using transaction manager
+      const showSeats = await queryRunner.manager.find(ShowSeat, {
         where: {
           show: { id: showId },
           seat: { id: In(seatIds) },
@@ -67,11 +65,11 @@ export class TicketService {
       // 3. Lock all seats (set status to LOCKED)
       for (const showSeat of showSeats) {
         showSeat.status = SeatStatus.LOCKED;
-        await this.showSeatRepository.save(showSeat);
+        await queryRunner.manager.save(ShowSeat, showSeat);
       }
 
       // 4. Calculate the ticket amount
-      const totalAmount = await this.calculateAmount(showSeats);
+      const totalAmount = await this.calculateAmount(showSeats, queryRunner);
 
       // 5. Create and save the Ticket
       const ticket = new Ticket();
@@ -79,15 +77,14 @@ export class TicketService {
       ticket.show = show;
       ticket.seats = showSeats.map((showSeat) => showSeat.seat);
       ticket.amount = totalAmount;
-      ticket.status = TicketStatus.PROCESSING; // Equivalent to PENDING
+      ticket.status = TicketStatus.PROCESSING;
       ticket.bookingTime = new Date();
 
-      const savedTicket = await this.ticketRepository.save(ticket);
+      const savedTicket = await queryRunner.manager.save(Ticket, ticket);
 
       // 6. Commit the transaction
       await queryRunner.commitTransaction();
 
-      // 7. Return the saved ticket
       return savedTicket;
     } catch (error) {
       // Rollback in case of error
@@ -100,7 +97,10 @@ export class TicketService {
   }
 
   // Helper method to calculate ticket amount based on seat types
-  private async calculateAmount(showSeats: ShowSeat[]): Promise<number> {
+  private async calculateAmount(
+    showSeats: ShowSeat[],
+    queryRunner: any
+  ): Promise<number> {
     let totalAmount = 0;
 
     // Get unique seat type IDs from the show seats
@@ -109,17 +109,17 @@ export class TicketService {
     ];
 
     // Get all relevant show seat types with prices
-    const showSeatTypes = await this.showSeatTypeRepository.find({
+    const showSeatTypes = await queryRunner.manager.find(ShowSeatType, {
       where: {
         show: { id: showSeats[0].show.id },
-        seatType: { id: { $in: seatTypeIds } },
+        seatType: { id: In(seatTypeIds) },
       },
       relations: ['seatType'],
     });
 
     // Create a price map for quick lookup
     const priceMap = new Map<string, number>();
-    showSeatTypes.forEach((sst) => {
+    showSeatTypes.forEach((sst: any) => {
       priceMap.set(sst.seatType.id, sst.price);
     });
 
